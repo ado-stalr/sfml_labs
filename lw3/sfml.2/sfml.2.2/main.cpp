@@ -5,6 +5,7 @@
 int main()
 {
     constexpr int pointCount = 200;
+    sf::Clock clock;
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
@@ -26,9 +27,10 @@ int main()
     for (int pointNo = 0; pointNo < pointCount; ++pointNo)
     {
         float angle = float(2 * M_PI * pointNo) / float(pointCount);
-        sf::Vector2f point = sf::Vector2f{
-            200 * sin(6 * angle) * std::sin(angle),
-            200 * sin(6 * angle) * std::cos(angle)};
+        float pointX = 200 * sin(6 * angle) * std::sin(angle);
+        float pointY = 200 * sin(6 * angle) * std::cos(angle);
+
+        sf::Vector2f point = sf::Vector2f{pointX, pointY};
         shape.setPoint(pointNo, point);
     }
 
@@ -43,14 +45,15 @@ int main()
             }
         }
 
-        movingAngle += 0.0005;
+        const float deltaTime = clock.restart().asSeconds();
+        const float newX = pointOrigin.x + 200 * sin(6 * movingAngle);
+        const float newY = pointOrigin.y + 200 * cos(6 * movingAngle);
 
-        shape.setRotation(rotationAngle += 0.1);
+        movingAngle += deltaTime * 0.5;
+        rotationAngle += deltaTime * 150;
 
-        shape.setPosition({
-            pointOrigin.x + 200 * sin(6 * movingAngle),
-            pointOrigin.y + 200 * cos(6 * movingAngle),
-        });
+        shape.setRotation(rotationAngle);
+        shape.setPosition({newX, newY});
 
         window.clear();
         window.draw(shape);

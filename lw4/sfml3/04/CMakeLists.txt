@@ -1,0 +1,9 @@
+# Добавляем исполняемый файл 00
+# Он собирается из 1 файла исходного кода: main.cpp
+add_executable(04 main.cpp)
+
+target_include_directories(04 PRIVATE ${SFML_INCLUDE_DIR})
+target_compile_features(04 PUBLIC cxx_std_17)
+target_compile_definitions(04 PRIVATE SFML_STATIC)
+
+target_link_libraries(04 ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
